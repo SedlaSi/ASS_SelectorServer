@@ -3,12 +3,14 @@ package tasks;
 import cache.FileItem;
 import security.PasswordDecoder;
 import provider.FileCacheProvider;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Created by root on 4.5.16.
@@ -16,6 +18,7 @@ import java.util.Arrays;
 public class PUTRunnableTask extends RunnableTask {
 
     byte [] body;
+    private static final Logger logger = Logger.getLogger("PUTRunnableTask");
 
     public PUTRunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider) {
         super(message, client, fileCacheProvider);
@@ -52,6 +55,7 @@ public class PUTRunnableTask extends RunnableTask {
                 }
                 fileItemCache.put(ROOT_PATH + url,body);
                 client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + CONTENT_TYPE_HTML + "\n" + PUT_SUCCESS_BEGIN_MSG+url+PUT_SUCCESS_END_MGS).getBytes("UTF-8")));
+                logger.fine("New file "+url+" created by user "+client.getLocalAddress());
             } catch (Exception e){
                 if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
                     client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));

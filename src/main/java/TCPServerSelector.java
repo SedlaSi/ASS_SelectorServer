@@ -6,9 +6,11 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 public class TCPServerSelector {
 
+    private static final Logger logger = Logger.getLogger("TCPServerSelector");
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 5012;
     static String SERVER_HOME_FOLDER =                           //Home folder of server
@@ -17,7 +19,6 @@ public class TCPServerSelector {
     private static final int TIMEOUT = 2; // Wait timeout (milliseconds)
 
     public static void main(String[] args) throws IOException {
-        //SERVER_HOME_FOLDER = "/tmp/server";
         Selector selector = Selector.open();
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.socket().bind(new InetSocketAddress(SERVER_IP,SERVER_PORT));
@@ -25,6 +26,7 @@ public class TCPServerSelector {
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
         TCPProtocol protocol = new EchoSelectorProtocol(serverSocket,selector,POOL_SIZE);
         RunnableTask.ROOT_PATH = SERVER_HOME_FOLDER;
+        logger.finest("Starting server with IP: "+SERVER_IP+", PORT: "+SERVER_PORT);
         while (true) {
             if (selector.select(TIMEOUT) == 0) {
                 continue;

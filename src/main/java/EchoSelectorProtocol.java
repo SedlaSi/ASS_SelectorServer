@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by root on 3/29/16.
@@ -17,10 +18,10 @@ public class EchoSelectorProtocol implements TCPProtocol {
     private ByteBuffer eleteBuf;
     private ServerSocketChannel server;
     private Selector selector;
-    private static final String WELCOME_MSG = "";
     private static final String UNKNOWN_COMMAND_ERR = RunnableTask.REQUEST_FAILED_HEADER_NOT_FOUND + RunnableTask.CONTENT_TYPE_HTML + "\n<html><body><h1>Unknown command, please try again.</h1></body></html>";
     private PoolProvider poolProvider;
     private FileCacheProvider fileCacheProvider;
+    private static final Logger logger = Logger.getLogger("EchoSelectorProtocol");
 
     public EchoSelectorProtocol(ServerSocketChannel serverSocketChannel, Selector selector, int poolSize){
         this.server = serverSocketChannel;
@@ -30,6 +31,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
         tag = ByteBuffer.allocate(1);
         etOrutBuff = ByteBuffer.allocate(3);
         eleteBuf = ByteBuffer.allocate(6);
+        logger.finest("EchoSelectorProtocol started");
     }
 
     public void handleRead(SelectionKey key) {
@@ -45,6 +47,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
                 }
                 if(new String(etOrutBuff.array(),"UTF-8").equals("ET ")){ // RIGHT TAG ACQUIRED
                     //System.out.println("GET  acquired");
+                    logger.fine("GET request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new GETRunnableTask(msg,socketChannel,fileCacheProvider);
                     SelectionKey key2 = socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -57,7 +60,8 @@ public class EchoSelectorProtocol implements TCPProtocol {
                     throw new IOException("Read exception");
                 }
                 if(new String(etOrutBuff.array(),"UTF-8").equals("UT ")){ // RIGHT TAG ACQUIRED
-                    System.out.println("PUT  acquired");
+                    //System.out.println("PUT  acquired");
+                    logger.fine("PUT request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new PUTRunnableTask(msg,socketChannel,fileCacheProvider);
                     SelectionKey key2 = socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -70,6 +74,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
                 }
                 if(new String(eleteBuf.array(),"UTF-8").equals("ELETE ")){ // RIGHT TAG ACQUIRED
                     //System.out.println("DELETE  acquired");
+                    logger.fine("DELETE request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new DELETERunnableTask(msg,socketChannel,fileCacheProvider);
                     SelectionKey key2 = socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -88,6 +93,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
             System.out.println("WRONG INPUT EXCEPTION");
             try{
                 readRest(socketChannel);
+                logger.warning("UNKNOWN COMMAND request acquired from client "+socketChannel.getLocalAddress());
                 byte [] msg = UNKNOWN_COMMAND_ERR.getBytes("UTF-8");
                 RunnableTask runnable = new ExceptionTask(msg,socketChannel,fileCacheProvider);
                 SelectionKey key2 = socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -105,10 +111,12 @@ public class EchoSelectorProtocol implements TCPProtocol {
 
     public void handleWrite(SelectionKey key) {
         try {
+
             SocketChannel client = (SocketChannel) key.channel();
             RunnableTask run = (RunnableTask) key.attachment();
             poolProvider.getPool().addTask(run);
             client.register(selector, SelectionKey.OP_READ);
+            logger.fine("Writing to client "+client.getLocalAddress());
         } catch (IOException e) {
             //e.printStackTrace();
         }
@@ -120,7 +128,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
             client.configureBlocking(false);
             SelectionKey key2 = client.register(selector, SelectionKey.OP_READ);
             SocketChannel output = (SocketChannel) key2.channel();
-            output.write(ByteBuffer.wrap(WELCOME_MSG.getBytes("UTF-8")));
+            logger.fine("Accepting new client "+client.getLocalAddress());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -152,7 +160,4 @@ public class EchoSelectorProtocol implements TCPProtocol {
         }
         return ArrayUtils.toPrimitive(strb.toArray(new Byte[strb.size()]));
     }
-
-
-
 }

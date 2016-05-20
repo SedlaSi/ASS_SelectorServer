@@ -30,7 +30,6 @@ public final class PasswordDecoder {
 
     public static boolean correctInformations(String password, FileItem fileItem){
         if(password == null && fileItem.getPasswords() != null && !fileItem.getPasswords().isEmpty()){
-            System.out.println("weqe");
             return false;
         }
         //System.out.println("Pass:"+password);
