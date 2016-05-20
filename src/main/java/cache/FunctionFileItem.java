@@ -38,23 +38,28 @@ public class FunctionFileItem implements Function<String,FileItem> {
         if(f.isHidden()){
             return null;
         }
-        FileItem fileItem;
+        FileItem fileItem = null;
         StringBuilder strb = new StringBuilder("");
         ArrayList<byte []> passwords = getPasswords(file);
         if(f.isDirectory()){
             // IF FILE PATH IS A FOLDER
             strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG);
             File[] listOfFiles = f.listFiles();
-
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile() && !listOfFiles[i].isHidden()) {
-                    strb.append(BEGIN_FILE).append(listOfFiles[i].getName()).append(END_FILE).append(BREAK);
-                } else if (listOfFiles[i].isDirectory() && !listOfFiles[i].isHidden()) {
-                    strb.append(BEGIN_FOLDER).append(listOfFiles[i].getName()).append(END_FOLDER).append(BREAK);
+            if(listOfFiles != null) {
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (listOfFiles[i].isFile() && !listOfFiles[i].isHidden()) {
+                        strb.append(BEGIN_FILE).append(listOfFiles[i].getName()).append(END_FILE).append(BREAK);
+                    } else if (listOfFiles[i].isDirectory() && !listOfFiles[i].isHidden()) {
+                        strb.append(BEGIN_FOLDER).append(listOfFiles[i].getName()).append(END_FOLDER).append(BREAK);
+                    }
                 }
             }
             strb.append(END_MSG);
-            fileItem = new FileItem(strb.toString().getBytes(),passwords);
+            try {
+                fileItem = new FileItem(strb.toString().getBytes("UTF-8"),passwords);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         } else { //if(f.isFile())
             // IF FILE PATH IS A FILE
             String postFix = "";

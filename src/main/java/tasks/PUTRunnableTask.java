@@ -5,6 +5,7 @@ import security.PasswordDecoder;
 import provider.FileCacheProvider;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 public class PUTRunnableTask extends RunnableTask {
 
     byte [] body;
-    private final String EMPTY_BODY_ERR = "Body of the file cannot be empty.";
 
     public PUTRunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider) {
         super(message, client, fileCacheProvider);
@@ -29,7 +29,7 @@ public class PUTRunnableTask extends RunnableTask {
             parseMessage();
             if(url != null) readBody();
             if(url == null) {
-                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes()));
+                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
                 client.close();
                 return;
             }
@@ -51,12 +51,12 @@ public class PUTRunnableTask extends RunnableTask {
                     throw new Exception(WRONG_PASSWORD_EXCEPTION);
                 }
                 fileItemCache.put(ROOT_PATH + url,body);
-                client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + CONTENT_TYPE_HTML + "\n" + PUT_SUCCESS_BEGIN_MSG+url+PUT_SUCCESS_END_MGS).getBytes()));
+                client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + CONTENT_TYPE_HTML + "\n" + PUT_SUCCESS_BEGIN_MSG+url+PUT_SUCCESS_END_MGS).getBytes("UTF-8")));
             } catch (Exception e){
                 if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
-                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes()));
+                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
                 } else {
-                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_INTERNAL_ERROR + CONTENT_TYPE_HTML + "\n" + INTERNAL_ERR_MSG).getBytes()));
+                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_INTERNAL_ERROR + CONTENT_TYPE_HTML + "\n" + INTERNAL_ERR_MSG).getBytes("UTF-8")));
                 }
             }
             //readURL();
@@ -74,7 +74,12 @@ public class PUTRunnableTask extends RunnableTask {
     }
 
     protected void readBody(){
-        int end = new String(message).indexOf(url) + url.length();
+        int end = 0;
+        try {
+            end = new String(message,"UTF-8").indexOf(url) + url.length();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         try {
 
             boolean doubleSpace = ((int)message[end] == 10 && (int)message[end+1] == 13 && (int)message[end+2] == 10);

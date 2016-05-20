@@ -61,15 +61,12 @@ public class TestTCPServerSelector {
         }
 
 
-        Thread serverThead = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
-                    TCPServerSelector.main(new String [] {""});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread serverThead = new Thread(() -> {
+            try {
+                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.main(new String [] {""});
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         serverThead.start();
@@ -215,15 +212,12 @@ public class TestTCPServerSelector {
         }
 
 
-        Thread serverThead = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
-                    TCPServerSelector.main(new String [] {""});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread serverThead = new Thread(() -> {
+            try {
+                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.main(new String [] {""});
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         serverThead.start();
@@ -379,15 +373,12 @@ public class TestTCPServerSelector {
         }
 
 
-        Thread serverThead = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
-                    TCPServerSelector.main(new String [] {""});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread serverThead = new Thread(() -> {
+            try {
+                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.main(new String [] {""});
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         serverThead.start();

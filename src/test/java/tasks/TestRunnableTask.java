@@ -27,7 +27,6 @@ public class TestRunnableTask {
         runnableTask.parseMessage();
         assertEquals(url,runnableTask.url);
         assertEquals(password, runnableTask.password);
-        assertEquals(acceptContent,runnableTask.acceptContent);
 
 
         message = (url + " \n").getBytes();
@@ -35,7 +34,6 @@ public class TestRunnableTask {
         runnableTask.parseMessage();
         runnableTask.run();
         runnableTask.getOperationTask();
-        assertNull(runnableTask.acceptContent);
         assertNull(runnableTask.password);
 
         message = (" asdasd").getBytes();

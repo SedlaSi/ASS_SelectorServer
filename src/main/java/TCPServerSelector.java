@@ -11,9 +11,9 @@ public class TCPServerSelector {
 
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 5012;
-    public static String SERVER_HOME_FOLDER =                           //Home folder of server
+    static String SERVER_HOME_FOLDER =                           //Home folder of server
             "/home/sedlasi1/Desktop/Skola/ASS/Semestralka/server/root"; // DO NOT put '/' at the end of the path
-    private static final int POOL_SIZE = 1; // Number of threads in pool
+    private static final int POOL_SIZE = 20; // Number of threads in pool
     private static final int TIMEOUT = 2; // Wait timeout (milliseconds)
 
     public static void main(String[] args) throws IOException {

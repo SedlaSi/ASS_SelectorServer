@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -80,14 +81,19 @@ public class FileItemCache {
         if(f.isHidden()){
             throw new Exception("FILE NOT EXISTS EXCEPTION");
         }
-        new PrintWriter(file, "UTF-8");
+        //new PrintWriter(file, "UTF-8").close();
         FileUtils.writeByteArrayToFile(new File(file), body);
         updateFolderAbove(file);
     }
 
     private void  updateFolderAbove(String url){
         //System.out.println(url);
-        byte [] path = url.getBytes();
+        byte [] path = new byte[0];
+        try {
+            path = url.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         char c;
         int i;
         for(i = path.length-1; i > 0 ; i--){

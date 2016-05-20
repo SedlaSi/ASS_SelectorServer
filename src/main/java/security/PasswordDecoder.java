@@ -20,7 +20,12 @@ public final class PasswordDecoder {
 
     private static String decodeBase64ToHT(String code){
         byte [] dec = DatatypeConverter.parseBase64Binary(code);
-        return new String(dec);
+        try {
+            return new String(dec,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static boolean correctInformations(String password, FileItem fileItem){
@@ -46,7 +51,12 @@ public final class PasswordDecoder {
 
         username = decodedPassword.substring(0,i+1);
         decodedPassword = decodedPassword.substring(i+1,decodedPassword.length());
-        byte [] md5Pass = md5.digest(decodedPassword.getBytes());
+        byte [] md5Pass = new byte[0];
+        try {
+            md5Pass = md5.digest(decodedPassword.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         byte [] userPass = new byte [username.length() + md5Pass.length];
 
         System.arraycopy(username.getBytes(),0,userPass,0         ,username.length());
@@ -92,8 +102,12 @@ public final class PasswordDecoder {
             idx = end;
             end ++;
         }
-        if(passwords.size() == 1 && new String(passwords.get(0)).equals("")){
-            passwords.remove(0);
+        try {
+            if(passwords.size() == 1 && new String(passwords.get(0),"UTF-8").equals("")){
+                passwords.remove(0);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
         if(passwords.isEmpty()){

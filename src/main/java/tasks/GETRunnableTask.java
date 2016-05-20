@@ -29,7 +29,7 @@ public class GETRunnableTask extends RunnableTask {
             //System.out.println("My url "+RunnableTask.ROOT_PATH);
             if(url == null){
                 System.out.println("url == null");
-                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes()));
+                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
                 // TESTING PURPOSE  ------ DELETE AFTER
                 client.close();
                 // TESTING PURPOSE  ------ DELETE AFTER
@@ -41,7 +41,7 @@ public class GETRunnableTask extends RunnableTask {
                if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
                    System.out.println(WRONG_PASSWORD_EXCEPTION);
                    try {
-                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes()));
+                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
                    } catch (IOException e1) {
                        System.out.println("Writing client exception....really?.....that is such a drag...");
                    }
@@ -49,7 +49,7 @@ public class GETRunnableTask extends RunnableTask {
                    try {
 
                        System.out.println(WRONG_URL_MSG);
-                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes()));
+                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
                    } catch (IOException e1) {
                        System.out.println("Writing client exception....really?.....that is such a drag...");
                    }
@@ -58,17 +58,17 @@ public class GETRunnableTask extends RunnableTask {
                 try {
                     client.close();
                 } catch (IOException easd) {
-                    System.out.println("close client exception...such a drag");
+                    System.out.println("Exception while closing client.");
                     e.printStackTrace();
                 }
                 // TESTING PURPOSE  ------ DELETE AFTER
                 return;
             }
-            client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + new String(fileOutput)).getBytes()));
+            client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + new String(fileOutput,"UTF-8")).getBytes("UTF-8")));
         } catch (Exception e) {
             try {
                 System.out.println(INTERNAL_ERR_MSG);
-                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_INTERNAL_ERROR + CONTENT_TYPE_HTML + "\n" + INTERNAL_ERR_MSG).getBytes()));
+                client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_INTERNAL_ERROR + CONTENT_TYPE_HTML + "\n" + INTERNAL_ERR_MSG).getBytes("UTF-8")));
             } catch (IOException e1) {
                 System.out.println("Writing client exception....really?.....that is such a drag...");
             }

@@ -2,6 +2,7 @@ package cache;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -9,11 +10,11 @@ import java.util.List;
  */
 public class FileItem {
 
-    private byte[] file;
-    private ArrayList<byte []> passwords;
+    private final byte[] file;
+    private final ArrayList<byte []> passwords;
 
     public FileItem(byte[] file, ArrayList<byte []> passwords){
-        this.file = file;
+        this.file = Arrays.copyOf(file,file.length);
         this.passwords = passwords;
     }
 
@@ -22,7 +23,7 @@ public class FileItem {
     }
 
     public byte[] getFile() {
-        return file;
+        return Arrays.copyOf(file,file.length);
     }
 
     public ArrayList<byte []> getPasswords() {

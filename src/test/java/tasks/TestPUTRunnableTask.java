@@ -33,14 +33,12 @@ public class TestPUTRunnableTask {
         runnableTask.parseMessage();
         assertEquals(url,runnableTask.url);
         assertEquals(password, runnableTask.password);
-        assertEquals(acceptContent,runnableTask.acceptContent);
 
 
         message = (url + " \n").getBytes();
         runnableTask = new PUTRunnableTask(message,client,fileCacheProvider);
         runnableTask.parseMessage();
         runnableTask.getOperationTask();
-        assertNull(runnableTask.acceptContent);
         assertNull(runnableTask.password);
 
         message = (" asdasd").getBytes();
