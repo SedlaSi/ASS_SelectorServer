@@ -34,7 +34,6 @@ public class TestTCPServerSelector {
             "\n" +
             "<html><body><h1>No file or directory to be deleted.</h1></body></html>\n";
 
-
     @Test
     public void testMainGET(){
         String path = "/tmp/server";
@@ -488,15 +487,12 @@ public class TestTCPServerSelector {
 
     @Test
     public void testMainWrongInput(){
-        Thread serverThead = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
-                    TCPServerSelector.main(new String [] {""});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread serverThead = new Thread(() -> {
+            try {
+                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.main(new String [] {""});
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         serverThead.start();

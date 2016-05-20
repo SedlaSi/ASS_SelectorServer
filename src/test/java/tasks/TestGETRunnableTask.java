@@ -7,15 +7,4 @@ import org.junit.Test;
  */
 public class TestGETRunnableTask {
 
-    @Test
-    public void testHi() throws Exception {
-
-    }
-
-    @Test(expected = Exception.class)
-    public void testHiWrong() throws Exception {
-
-    }
-
-
 }
