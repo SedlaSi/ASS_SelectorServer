@@ -17,12 +17,10 @@ public abstract class RunnableTask implements Runnable {
     String url;
     String password;
     byte[] message;
-    public static String ROOT_PATH;
     static final String WRONG_URL_MSG = "<html><body><h1>Wrong path, please try again.</h1></body></html>";
     static final String WRONG_PASSWORD_EXCEPTION = "WRONG PASSWORD EXCEPTION";
     static final String WRONG_PASSWORD_MSG = "<html><body><h1>Please insert correct username:password then try again.</h1></body></html>";
     static final String INTERNAL_ERR_MSG = "<html><body><h1>Internal server error, please repeat your task.</h1></body></html>";
-    public static final String REQUEST_FAILED_HEADER = "HTTP/1.1 401 FAILURE\n";
     public static final String REQUEST_FAILED_HEADER_NOT_FOUND = "HTTP/1.1 404 Page not found\n";
     static final String REQUEST_FAILED_HEADER_AUTHORIZATION = "HTTP/1.1 401 Authorization failed\n";
     static final String REQUEST_FAILED_HEADER_INTERNAL_ERROR = "HTTP/1.1 501 Internal Error\n";
@@ -36,24 +34,22 @@ public abstract class RunnableTask implements Runnable {
     static final String DELETE_SUCCESS_BEGIN_MSG =  "<html><body><h1>File ";
     static final String DELETE_SUCCESS_END_MSG =  " has been deleted.</h1></body></html>";
     static final String DELETE_ERR_MSG = "<html><body><h1>No file or directory to be deleted.</h1></body></html>";
-    private static final String ACCEPT_TYPE_REQUEST = "Accept: ";
     private static final String AUTHORIZATION_REQUEST = "Authorization: Basic ";
 
     OperationTask operationTask;
 
-    RunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider){
+    public RunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider){
         this.fileItemCache = fileCacheProvider.getFileItemCache();
         this.client = client;
         operationTask = null;
-        this.message = message;
+        this.message = Arrays.copyOf(message,message.length);
     }
 
     @Override
     public void run() {
-
     }
 
-    protected void parseMessage(){
+    void parseMessage(){
         byte [] msg = message;
         //System.out.println("Message:|"+new String(msg)+"|");
         char c;
@@ -133,7 +129,7 @@ public abstract class RunnableTask implements Runnable {
 
     }
 
-    public OperationTask getOperationTask(){
+    OperationTask getOperationTask(){
         return operationTask;
     }
 

@@ -3,6 +3,7 @@ package tasks;
 import cache.FileItem;
 import security.PasswordDecoder;
 import provider.FileCacheProvider;
+import server.TCPServerSelector;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -86,7 +87,7 @@ public class GETRunnableTask extends RunnableTask {
     }
 
     private byte[] fileOutput() throws Exception{
-        FileItem  fileItem = fileItemCache.get(ROOT_PATH + url);
+        FileItem  fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + url);
         if(fileItem.isSecured() && !PasswordDecoder.correctInformations(password,fileItem)){
             throw new Exception(WRONG_PASSWORD_EXCEPTION);
         }

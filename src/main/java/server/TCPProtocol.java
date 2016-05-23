@@ -1,3 +1,5 @@
+package server;
+
 import java.nio.channels.SelectionKey;
 
 /**

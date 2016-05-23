@@ -27,7 +27,7 @@ public class FileItemCache {
         ((FunctionFileItem)loader).setCachedData(cachedData);
     }
 
-    public HashMap<String,SoftReference<FileItem>> getCachedData(){
+    HashMap<String,SoftReference<FileItem>> getCachedData(){
         return cachedData;
     }
 

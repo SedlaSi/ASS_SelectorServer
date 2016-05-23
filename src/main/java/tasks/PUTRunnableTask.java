@@ -3,6 +3,7 @@ package tasks;
 import cache.FileItem;
 import security.PasswordDecoder;
 import provider.FileCacheProvider;
+import server.TCPServerSelector;
 import sun.rmi.runtime.Log;
 
 import java.io.IOException;
@@ -49,11 +50,11 @@ public class PUTRunnableTask extends RunnableTask {
                 while(url.charAt(a) != '/') a--;
                 subUrl = url.substring(0,a);
                 //System.out.println("SUB URL: " + subUrl);
-                FileItem fileItem = fileItemCache.get(ROOT_PATH + subUrl);
+                FileItem fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + subUrl);
                 if(fileItem.isSecured() && !PasswordDecoder.correctInformations(password,fileItem)){
                     throw new Exception(WRONG_PASSWORD_EXCEPTION);
                 }
-                fileItemCache.put(ROOT_PATH + url,body);
+                fileItemCache.put(TCPServerSelector.ROOT_PATH + url,body);
                 client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + CONTENT_TYPE_HTML + "\n" + PUT_SUCCESS_BEGIN_MSG+url+PUT_SUCCESS_END_MGS).getBytes("UTF-8")));
                 logger.fine("New file "+url+" created by user "+client.getLocalAddress());
             } catch (Exception e){

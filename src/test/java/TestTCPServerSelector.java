@@ -1,6 +1,7 @@
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import server.TCPServerSelector;
 
 import java.io.*;
 import java.net.Socket;
@@ -63,7 +64,7 @@ public class TestTCPServerSelector {
 
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();
@@ -214,7 +215,7 @@ public class TestTCPServerSelector {
 
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();
@@ -375,7 +376,7 @@ public class TestTCPServerSelector {
 
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();
@@ -480,7 +481,7 @@ public class TestTCPServerSelector {
     public void testMainWrongInput(){
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.SERVER_HOME_FOLDER = "/tmp/server";
+                TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();

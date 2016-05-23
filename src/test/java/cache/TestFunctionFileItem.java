@@ -2,6 +2,7 @@ package cache;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import server.TCPServerSelector;
 import tasks.RunnableTask;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class TestFunctionFileItem {
     @Test
     public void testApply(){
         String path = "/tmp/.hidden";
-        RunnableTask.ROOT_PATH = "/tmp";
+        TCPServerSelector.ROOT_PATH = "/tmp";
         byte [] body = "This is body".getBytes();
         String incommingBody = "Content-Type: text/html\n" +
                 "\n" +

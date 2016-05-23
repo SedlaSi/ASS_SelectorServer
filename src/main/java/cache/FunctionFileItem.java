@@ -1,6 +1,7 @@
 package cache;
 
 import security.PasswordDecoder;
+import server.TCPServerSelector;
 import tasks.RunnableTask;
 
 import javax.imageio.ImageIO;
@@ -146,10 +147,10 @@ public class FunctionFileItem implements Function<String,FileItem> {
         }
 
         //System.out.println("ROOT_PATH: "+RunnableTask.ROOT_PATH);
-        if(f.getAbsolutePath().equals(RunnableTask.ROOT_PATH)){
+        if(f.getAbsolutePath().equals(TCPServerSelector.ROOT_PATH)){
             return passwords;
         }
-        while(!f.getParent().equals(RunnableTask.ROOT_PATH) && passwords == null){
+        while(!f.getParent().equals(TCPServerSelector.ROOT_PATH) && passwords == null){
             //System.out.println("f address before: "+f.getAbsolutePath());
             f = f.getParentFile();
             //System.out.println("f address after: "+f.getAbsolutePath());

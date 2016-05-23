@@ -51,6 +51,11 @@ public class TestRunnableTask {
         runnableTask.parseMessage();
         assertEquals(runnableTask.url, "/adress");
 
+        message = ("/adres\n").getBytes();
+        runnableTask = new RunnableTaskImpl(message,client,fileCacheProvider);
+        runnableTask.parseMessage();
+        assertEquals(runnableTask.url, "/adres");
+
     }
 
     private class RunnableTaskImpl extends RunnableTask {

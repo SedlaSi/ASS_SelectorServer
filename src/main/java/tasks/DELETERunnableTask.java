@@ -3,6 +3,7 @@ package tasks;
 import cache.FileItem;
 import security.PasswordDecoder;
 import provider.FileCacheProvider;
+import server.TCPServerSelector;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -33,11 +34,11 @@ public class DELETERunnableTask extends RunnableTask {
                     client.close();
                     return;
                 }
-                FileItem fileItem = fileItemCache.get(ROOT_PATH + url);
+                FileItem fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + url);
                 if(fileItem.isSecured() && !PasswordDecoder.correctInformations(password,fileItem)){
                     throw new Exception(WRONG_PASSWORD_EXCEPTION);
                 }
-                fileItemCache.remove(ROOT_PATH + url);
+                fileItemCache.remove(TCPServerSelector.ROOT_PATH + url);
                 client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + CONTENT_TYPE_HTML + "\n" + DELETE_SUCCESS_BEGIN_MSG+url+DELETE_SUCCESS_END_MSG).getBytes("UTF-8")));
                 logger.fine("File "+url+" has been deleted by client "+client.getLocalAddress());
             } catch (Exception e){

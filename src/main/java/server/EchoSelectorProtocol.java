@@ -1,3 +1,5 @@
+package server;
+
 import org.apache.commons.lang.ArrayUtils;
 import provider.FileCacheProvider;
 import provider.PoolProvider;
@@ -21,7 +23,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
     private static final String UNKNOWN_COMMAND_ERR = RunnableTask.REQUEST_FAILED_HEADER_NOT_FOUND + RunnableTask.CONTENT_TYPE_HTML + "\n<html><body><h1>Unknown command, please try again.</h1></body></html>";
     private PoolProvider poolProvider;
     private FileCacheProvider fileCacheProvider;
-    private static final Logger logger = Logger.getLogger("EchoSelectorProtocol");
+    private static final Logger logger = Logger.getLogger("server.EchoSelectorProtocol");
 
     public EchoSelectorProtocol(ServerSocketChannel serverSocketChannel, Selector selector, int poolSize){
         this.server = serverSocketChannel;
@@ -31,7 +33,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
         tag = ByteBuffer.allocate(1);
         etOrutBuff = ByteBuffer.allocate(3);
         eleteBuf = ByteBuffer.allocate(6);
-        logger.finest("EchoSelectorProtocol started");
+        logger.finest("server.EchoSelectorProtocol started");
     }
 
     public void handleRead(SelectionKey key) {
@@ -87,10 +89,10 @@ public class EchoSelectorProtocol implements TCPProtocol {
             }
         } catch (IOException e) {
             //e.printStackTrace();
-            System.out.println("IOException catched in EchoSelectorProtocol");
+            //System.out.println("IOException catched in server.EchoSelectorProtocol");
         } catch (Exception ex){
             //ex.printStackTrace();
-            System.out.println("WRONG INPUT EXCEPTION");
+            //System.out.println("WRONG INPUT EXCEPTION");
             try{
                 readRest(socketChannel);
                 logger.warning("UNKNOWN COMMAND request acquired from client "+socketChannel.getLocalAddress());
@@ -126,8 +128,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
         try {
             SocketChannel client = server.accept();
             client.configureBlocking(false);
-            SelectionKey key2 = client.register(selector, SelectionKey.OP_READ);
-            SocketChannel output = (SocketChannel) key2.channel();
+            client.register(selector, SelectionKey.OP_READ);
             logger.fine("Accepting new client "+client.getLocalAddress());
         } catch (IOException e) {
             e.printStackTrace();

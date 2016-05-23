@@ -3,6 +3,7 @@ package cache;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import provider.FileCacheProvider;
+import server.TCPServerSelector;
 import tasks.RunnableTask;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class TestFileItemCache {
 
     @Test
     public void testGet(){
-        RunnableTask.ROOT_PATH = "/tmp";
+        TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
         String path = "/tmp/file";
 
@@ -64,7 +65,7 @@ public class TestFileItemCache {
 
     @Test
     public void testRemove(){
-        RunnableTask.ROOT_PATH = "/tmp";
+        TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
         String path = "/tmp/file";
 
@@ -110,7 +111,7 @@ public class TestFileItemCache {
 
     @Test
     public void testPut(){
-        RunnableTask.ROOT_PATH = "/tmp";
+        TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
         String path = "/tmp/.hidden";
         File f = new File(path);
