@@ -11,22 +11,22 @@ import java.util.List;
 public class FileItem {
 
     private final byte[] file;
-    private final ArrayList<byte []> passwords;
+    private final ArrayList<byte[]> passwords;
 
-    public FileItem(byte[] file, ArrayList<byte []> passwords){
-        this.file = Arrays.copyOf(file,file.length);
+    public FileItem(byte[] file, ArrayList<byte[]> passwords) {
+        this.file = Arrays.copyOf(file, file.length);
         this.passwords = passwords;
     }
 
-    public boolean isSecured(){
+    public boolean isSecured() {
         return this.passwords != null;
     }
 
     public byte[] getFile() {
-        return Arrays.copyOf(file,file.length);
+        return Arrays.copyOf(file, file.length);
     }
 
-    public ArrayList<byte []> getPasswords() {
+    public ArrayList<byte[]> getPasswords() {
         return this.passwords;
     }
 

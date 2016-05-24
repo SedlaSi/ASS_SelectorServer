@@ -22,10 +22,10 @@ public class GETRunnableTask extends RunnableTask {
 
     @Override
     public void run() {
-        byte [] fileOutput;
+        byte[] fileOutput;
         try {
             parseMessage();
-            if(url == null){
+            if (url == null) {
                 System.out.println("url == null");
                 client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
                 // TESTING PURPOSE  ------ DELETE AFTER
@@ -33,25 +33,25 @@ public class GETRunnableTask extends RunnableTask {
                 // TESTING PURPOSE  ------ DELETE AFTER
                 return;
             }
-            try{
+            try {
                 fileOutput = fileOutput();
-            } catch (Exception e){
-               if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
-                   System.out.println(WRONG_PASSWORD_EXCEPTION);
-                   try {
-                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + REQUIRED_AUTHENTICATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
-                   } catch (IOException e1) {
-                       System.out.println("Writing client exception....really?.....that is such a drag...");
-                   }
-               } else {
-                   try {
+            } catch (Exception e) {
+                if (e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)) {
+                    System.out.println(WRONG_PASSWORD_EXCEPTION);
+                    try {
+                        client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + REQUIRED_AUTHENTICATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
+                    } catch (IOException e1) {
+                        System.out.println("Writing client exception....really?.....that is such a drag...");
+                    }
+                } else {
+                    try {
 
-                       System.out.println(WRONG_URL_MSG);
-                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
-                   } catch (IOException e1) {
-                       System.out.println("Writing client exception....really?.....that is such a drag...");
-                   }
-               }
+                        System.out.println(WRONG_URL_MSG);
+                        client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
+                    } catch (IOException e1) {
+                        System.out.println("Writing client exception....really?.....that is such a drag...");
+                    }
+                }
                 // TESTING PURPOSE  ------ DELETE AFTER
                 try {
                     client.close();
@@ -63,9 +63,9 @@ public class GETRunnableTask extends RunnableTask {
                 return;
             }
 
-            byte [] msg = new byte [REQUEST_SUCCESS_HEADER.length() + fileOutput.length];
-            System.arraycopy(REQUEST_SUCCESS_HEADER.getBytes("UTF-8"),0,msg,0         ,REQUEST_SUCCESS_HEADER.length());
-            System.arraycopy(fileOutput,0,msg,REQUEST_SUCCESS_HEADER.length(),fileOutput.length);
+            byte[] msg = new byte[REQUEST_SUCCESS_HEADER.length() + fileOutput.length];
+            System.arraycopy(REQUEST_SUCCESS_HEADER.getBytes("UTF-8"), 0, msg, 0, REQUEST_SUCCESS_HEADER.length());
+            System.arraycopy(fileOutput, 0, msg, REQUEST_SUCCESS_HEADER.length(), fileOutput.length);
             client.write(ByteBuffer.wrap(msg));
 
 
@@ -89,14 +89,13 @@ public class GETRunnableTask extends RunnableTask {
         // TESTING PURPOSE  ------ DELETE AFTER
     }
 
-    private byte[] fileOutput() throws Exception{
-        FileItem  fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + url);
-        if(fileItem.isSecured() && !PasswordDecoder.correctInformations(password,fileItem)){
+    private byte[] fileOutput() throws Exception {
+        FileItem fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + url);
+        if (fileItem.isSecured() && !PasswordDecoder.correctInformations(password, fileItem)) {
             throw new Exception(WRONG_PASSWORD_EXCEPTION);
         }
         return fileItem.getFile();
     }
-
 
 
 }

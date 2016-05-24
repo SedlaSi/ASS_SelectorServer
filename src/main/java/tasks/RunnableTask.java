@@ -32,19 +32,19 @@ public abstract class RunnableTask implements Runnable {
     static final String REQUEST_SUCCESS_HEADER = "HTTP/1.1 200 OK\n";
     static final String PUT_SUCCESS_BEGIN_MSG = "<html><body><h1>Successfully created a new file: ";
     static final String PUT_SUCCESS_END_MGS = "</h1></body></html>";
-    static final String DELETE_SUCCESS_BEGIN_MSG =  "<html><body><h1>File ";
-    static final String DELETE_SUCCESS_END_MSG =  " has been deleted.</h1></body></html>";
+    static final String DELETE_SUCCESS_BEGIN_MSG = "<html><body><h1>File ";
+    static final String DELETE_SUCCESS_END_MSG = " has been deleted.</h1></body></html>";
     static final String DELETE_ERR_MSG = "<html><body><h1>No file or directory to be deleted.</h1></body></html>";
     private static final String AUTHORIZATION_REQUEST = "Authorization: Basic ";
 
     OperationTask operationTask;
 
-    public RunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider){
+    public RunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider) {
         this.fileItemCache = fileCacheProvider.getFileItemCache();
         this.client = client;
         operationTask = null;
-        if(message != null){
-            this.message = Arrays.copyOf(message,message.length);
+        if (message != null) {
+            this.message = Arrays.copyOf(message, message.length);
         }
     }
 
@@ -52,33 +52,33 @@ public abstract class RunnableTask implements Runnable {
     public void run() {
     }
 
-    void parseMessage(){
-        byte [] msg = message;
+    void parseMessage() {
+        byte[] msg = message;
         char c;
         int beg;
-        for(beg = 0; beg < msg.length; beg++){
-            c = (char)msg[beg];
-            if(c != ' ' && c != '/' && c != '.'){ // INVALID URL SET
+        for (beg = 0; beg < msg.length; beg++) {
+            c = (char) msg[beg];
+            if (c != ' ' && c != '/' && c != '.') { // INVALID URL SET
                 url = null;
                 return;
-            } else if(c == '/'){
+            } else if (c == '/') {
                 break;
             }
         }
         int end;
-        for(end = beg; end < msg.length; end++){
-            if((char)msg[end] == ' ' || (char)msg[end] == '\n' || (int)msg[end] == 13){
+        for (end = beg; end < msg.length; end++) {
+            if ((char) msg[end] == ' ' || (char) msg[end] == '\n' || (int) msg[end] == 13) {
 
                 try {
-                    url = new String(Arrays.copyOfRange(message,beg,end),"UTF-8");
+                    url = new String(Arrays.copyOfRange(message, beg, end), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            if(end+2 < msg.length && ((char)msg[end] == '%' && (char)msg[end+1] == '2' && (char)msg[end+2] == '0')){
+            if (end + 2 < msg.length && ((char) msg[end] == '%' && (char) msg[end + 1] == '2' && (char) msg[end + 2] == '0')) {
                 try {
-                    url = new String(Arrays.copyOfRange(message,beg,end),"UTF-8");
+                    url = new String(Arrays.copyOfRange(message, beg, end), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -86,32 +86,31 @@ public abstract class RunnableTask implements Runnable {
                 break;
             }
         }
-        if(url == null || url.isEmpty()) {
+        if (url == null || url.isEmpty()) {
             try {
-                url = new String(Arrays.copyOfRange(message,beg,end),"UTF-8");
+                url = new String(Arrays.copyOfRange(message, beg, end), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
         String msgStr = "";
         try {
-            msgStr = new String(msg,"UTF-8");
+            msgStr = new String(msg, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         beg = msgStr.indexOf(AUTHORIZATION_REQUEST);
-        if(beg == -1){
+        if (beg == -1) {
             password = null;
         } else {
             beg += AUTHORIZATION_REQUEST.length();
             end = beg;
-            while(end < msg.length && (char)msg[end] != '\n') end++;
-            password = msgStr.substring(beg,end-1);
-            //System.out.println("BasedPassword = |"+password+"|");
+            while (end < msg.length && (char) msg[end] != '\n') end++;
+            password = msgStr.substring(beg, end - 1);
         }
     }
 
-    OperationTask getOperationTask(){
+    OperationTask getOperationTask() {
         return operationTask;
     }
 

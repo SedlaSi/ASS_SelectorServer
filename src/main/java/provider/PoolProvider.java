@@ -9,15 +9,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * Created by root on 4.5.16.
  */
-public class PoolProvider{
+public class PoolProvider {
 
     private WorkerPool pool;
 
-    public PoolProvider(int poolSize){
+    public PoolProvider(int poolSize) {
         pool = new MyWorkerPool(poolSize);
     }
 
-    public WorkerPool getPool(){
+    public WorkerPool getPool() {
         return pool;
     }
 }

@@ -12,7 +12,7 @@ public class FileCacheProvider {
     private final FunctionFileItem functionFileItem;
 
 
-    public FileCacheProvider(){
+    public FileCacheProvider() {
         functionFileItem = new FunctionFileItem();
         fileItemCache = new FileItemCache(functionFileItem);
     }

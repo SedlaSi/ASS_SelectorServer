@@ -15,7 +15,7 @@ import java.util.function.Function;
 /**
  * Created by root on 4.5.16.
  */
-public class FunctionFileItem implements Function<String,FileItem> {
+public class FunctionFileItem implements Function<String, FileItem> {
 
     private static final String BEGIN_MSG = "<html><body><table>\n" +
             "<tbody>\n" +
@@ -51,29 +51,29 @@ public class FunctionFileItem implements Function<String,FileItem> {
     /**
      * METHOD READS FILE AND RETURN RESULT AS <class>FileItem</class>.
      * CAN BE IMAGE OR FILE TEXT OR DUMP OF FOLDER!!!!
-     * */
+     */
     @Override
-    public FileItem apply(String file){
+    public FileItem apply(String file) {
         File f = new File(file);
-        if(f.isHidden()){
+        if (f.isHidden()) {
             return null;
         }
         FileItem fileItem = null;
         StringBuilder strb = new StringBuilder("");
-        ArrayList<byte []> passwords = getPasswords(file);
-        int idx = file.length()-1;
+        ArrayList<byte[]> passwords = getPasswords(file);
+        int idx = file.length() - 1;
         String relativePath;
-        if(file.charAt(idx) == '/') {
+        if (file.charAt(idx) == '/') {
             relativePath = file.substring(idx);
         } else {
-            while(file.charAt(idx) != '/') idx--;
+            while (file.charAt(idx) != '/') idx--;
             relativePath = file.substring(TCPServerSelector.ROOT_PATH.length()) + "/";
         }
-        if(f.isDirectory()){
+        if (f.isDirectory()) {
             // IF FILE PATH IS A FOLDER
             strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG);
             File[] listOfFiles = f.listFiles();
-            if(listOfFiles != null) {
+            if (listOfFiles != null) {
                 for (int i = 0; i < listOfFiles.length; i++) {
                     if (listOfFiles[i].isFile() && !listOfFiles[i].isHidden()) {
                         strb.append(BEGIN_FILE).append(BEGIN_LINK).append(relativePath).append(listOfFiles[i].getName()).append(MIDDLE_LINK).append(listOfFiles[i].getName()).append(END_LINK).append(END_FILE);
@@ -84,63 +84,63 @@ public class FunctionFileItem implements Function<String,FileItem> {
             }
             strb.append(END_MSG);
             try {
-                fileItem = new FileItem(strb.toString().getBytes("UTF-8"),passwords);
+                fileItem = new FileItem(strb.toString().getBytes("UTF-8"), passwords);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        } else { //if(f.isFile())
+        } else {
             // IF FILE PATH IS A FILE
             String postFix = "";
-            if(file.length() > 4){
-                postFix = file.substring(file.length()-4,file.length());
+            if (file.length() > 4) {
+                postFix = file.substring(file.length() - 4, file.length());
             }
-            if(postFix.equals(JPEG) || postFix.equals(JPG) || postFix.equals(PNG)){ // IF FILE PATH IS AN IMAGE
+            if (postFix.equals(JPEG) || postFix.equals(JPG) || postFix.equals(PNG)) { // IF FILE PATH IS AN IMAGE
                 String img;
-                byte[] imageInByte = null;
-                if(postFix.equals(JPEG) || postFix.equals(JPG)){
+                byte[] imageInByte;
+                if (postFix.equals(JPEG) || postFix.equals(JPG)) {
                     img = RunnableTask.CONTENT_TYPE_JPEG + "\n";
 
-                    try{
+                    try {
                         BufferedImage originalImage = ImageIO.read(f);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write( originalImage, "jpg", baos );
+                        ImageIO.write(originalImage, "jpg", baos);
                         baos.flush();
                         imageInByte = baos.toByteArray();
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
                 } else {
                     img = RunnableTask.CONTENT_TYPE_PNG + "\n";
-                    try{
+                    try {
                         BufferedImage originalImage = ImageIO.read(f);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write( originalImage, "png", baos );
+                        ImageIO.write(originalImage, "png", baos);
                         baos.flush();
                         imageInByte = baos.toByteArray();
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
                 }
                 byte[] combined = null;
-                if(imageInByte != null){
+                if (imageInByte != null) {
                     combined = new byte[img.length() + imageInByte.length];
                     try {
-                        System.arraycopy(img.getBytes("UTF-8"),0,combined,0         ,img.length());
+                        System.arraycopy(img.getBytes("UTF-8"), 0, combined, 0, img.length());
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    System.arraycopy(imageInByte,0,combined,img.length(),imageInByte.length);
+                    System.arraycopy(imageInByte, 0, combined, img.length(), imageInByte.length);
                 }
 
-                fileItem = new FileItem(combined,passwords);
+                fileItem = new FileItem(combined, passwords);
             } else {  // IF FILE PATH IS A FILE
                 try {
                     strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG + BEGIN_FILE);
                     String s;
                     BufferedReader bf = new BufferedReader(new FileReader(file));
-                    while ((s = bf.readLine()) != null){
+                    while ((s = bf.readLine()) != null) {
                         strb.append(s).append("\n");
                     }
                     strb.append(END_FILE + END_MSG);
@@ -150,18 +150,18 @@ public class FunctionFileItem implements Function<String,FileItem> {
                     return null;
                 }
 
-                fileItem = new FileItem(strb.toString().getBytes(),passwords);
+                fileItem = new FileItem(strb.toString().getBytes(), passwords);
             }
         }
         return fileItem;
     }
 
-    private ArrayList<byte []> getPasswords(String file) {
-        ArrayList<byte []> passwords = null;
+    private ArrayList<byte[]> getPasswords(String file) {
+        ArrayList<byte[]> passwords = null;
         File f = new File(file);
-        if(f.isDirectory()){ // v tom pripade musime projet i obsah teto slozky, jinak jdeme vyse pokud cesta neni /root
+        if (f.isDirectory()) {
             File[] listOfFiles = f.listFiles();
-            if(listOfFiles != null) {
+            if (listOfFiles != null) {
                 for (File listOfFile : listOfFiles) {
                     if (listOfFile.isHidden() && listOfFile.getName().equals(PasswordDecoder.SECURITY_FILE)) { //nasli jsme soubor s hesly
                         passwords = PasswordDecoder.passwordsFrom(file + "/" + PasswordDecoder.SECURITY_FILE);
@@ -171,20 +171,17 @@ public class FunctionFileItem implements Function<String,FileItem> {
             }
         }
 
-        //System.out.println("ROOT_PATH: "+RunnableTask.ROOT_PATH);
-        if(f.getAbsolutePath().equals(TCPServerSelector.ROOT_PATH)){
+        if (f.getAbsolutePath().equals(TCPServerSelector.ROOT_PATH)) {
             return passwords;
         }
-        while(!f.getParent().equals(TCPServerSelector.ROOT_PATH) && passwords == null){
-            //System.out.println("f address before: "+f.getAbsolutePath());
+        while (!f.getParent().equals(TCPServerSelector.ROOT_PATH) && passwords == null) {
             f = f.getParentFile();
-            //System.out.println("f address after: "+f.getAbsolutePath());
             SoftReference<FileItem> sf = cachedData.get(f.getAbsolutePath());
             FileItem fileItem;
-            if(sf != null && (fileItem = sf.get()) != null){ // zkusim najit v cache jinak parsuju ze souboru
+            if (sf != null && (fileItem = sf.get()) != null) {
                 passwords = fileItem.getPasswords();
             } else {
-                passwords = PasswordDecoder.passwordsFrom(f.getAbsolutePath()+"/"+PasswordDecoder.SECURITY_FILE);
+                passwords = PasswordDecoder.passwordsFrom(f.getAbsolutePath() + "/" + PasswordDecoder.SECURITY_FILE);
             }
 
         }
@@ -192,7 +189,7 @@ public class FunctionFileItem implements Function<String,FileItem> {
         return passwords;
     }
 
-    void setCachedData(HashMap<String, SoftReference<FileItem>> cachedData){
+    void setCachedData(HashMap<String, SoftReference<FileItem>> cachedData) {
         this.cachedData = cachedData;
     }
 }

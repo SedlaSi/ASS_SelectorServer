@@ -7,6 +7,8 @@ import java.nio.channels.SelectionKey;
  */
 public interface TCPProtocol {
     public void handleAccept(SelectionKey key);
+
     public void handleRead(SelectionKey key);
+
     public void handleWrite(SelectionKey key);
 }
