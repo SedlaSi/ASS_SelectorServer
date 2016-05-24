@@ -15,7 +15,6 @@ import java.nio.channels.SocketChannel;
  */
 public class GETRunnableTask extends RunnableTask {
 
-
     public GETRunnableTask(byte[] message, SocketChannel client, FileCacheProvider fileCacheProvider) {
         super(message, client, fileCacheProvider);
         operationTask = OperationTask.GET;
@@ -63,7 +62,13 @@ public class GETRunnableTask extends RunnableTask {
                 // TESTING PURPOSE  ------ DELETE AFTER
                 return;
             }
-            client.write(ByteBuffer.wrap((REQUEST_SUCCESS_HEADER + new String(fileOutput,"UTF-8")).getBytes("UTF-8")));
+
+            byte [] msg = new byte [REQUEST_SUCCESS_HEADER.length() + fileOutput.length];
+            System.arraycopy(REQUEST_SUCCESS_HEADER.getBytes("UTF-8"),0,msg,0         ,REQUEST_SUCCESS_HEADER.length());
+            System.arraycopy(fileOutput,0,msg,REQUEST_SUCCESS_HEADER.length(),fileOutput.length);
+            client.write(ByteBuffer.wrap(msg));
+
+
         } catch (Exception e) {
             try {
                 System.out.println(INTERNAL_ERR_MSG);

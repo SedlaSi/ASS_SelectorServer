@@ -105,10 +105,13 @@ public class FunctionFileItem implements Function<String,FileItem> {
                 byte[] combined = null;
                 if(imageInByte != null){
                     combined = new byte[img.length() + imageInByte.length];
-                    System.arraycopy(img.getBytes(),0,combined,0         ,img.length());
+                    try {
+                        System.arraycopy(img.getBytes("UTF-8"),0,combined,0         ,img.length());
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     System.arraycopy(imageInByte,0,combined,img.length(),imageInByte.length);
                 }
-
 
                 fileItem = new FileItem(combined,passwords);
             } else {  // IF FILE PATH IS A FILE
@@ -125,6 +128,7 @@ public class FunctionFileItem implements Function<String,FileItem> {
                     e.printStackTrace();
                     return null;
                 }
+
                 fileItem = new FileItem(strb.toString().getBytes(),passwords);
             }
         }

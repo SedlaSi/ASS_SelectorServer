@@ -87,6 +87,11 @@ public class PUTRunnableTask extends RunnableTask {
             if(end < message.length-2) {
                 end+=2;
             }
+
+            /*for(int i = end-5; i < message.length; i++){
+                System.out.print((int)message[i] + " ");
+            }*/
+
             body = Arrays.copyOfRange(message,end,message.length);
         } catch (Exception e){
             body = null;

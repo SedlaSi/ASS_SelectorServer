@@ -58,7 +58,11 @@ public final class PasswordDecoder {
         }
         byte [] userPass = new byte [username.length() + md5Pass.length];
 
-        System.arraycopy(username.getBytes(),0,userPass,0         ,username.length());
+        try {
+            System.arraycopy(username.getBytes("UTF-8"),0,userPass,0         ,username.length());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         System.arraycopy(md5Pass,0,userPass,username.length(),md5Pass.length);
         // WRITE INCOMMING PASSWORD AND USERNAME TO FILE
         /*try {
