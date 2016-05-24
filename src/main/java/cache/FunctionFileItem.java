@@ -17,16 +17,35 @@ import java.util.function.Function;
  */
 public class FunctionFileItem implements Function<String,FileItem> {
 
-    private static final String BEGIN_MSG = "<html><body>";
-    private static final String END_MSG = "</body></html>";
-    private static final String BEGIN_FOLDER = "<h1>";
-    private static final String END_FOLDER = "</h1>";
-    private static final String BEGIN_FILE = "<h2>";
-    private static final String END_FILE = "</h2>";
-    private static final String BREAK = "<br>";
+    private static final String BEGIN_MSG = "<html><body><table>\n" +
+            "<tbody>\n" +
+            "<tr>\n" +
+            "  <td><h3>CONTENT:</h3></td>\n" +
+            "</tr>\n" +
+            "<tr>\n" +
+            "<td>\n" +
+            "<table>\n" +
+            "<tbody>";
+    private static final String END_MSG = "</tbody>\n" +
+            "</table>\n" +
+            "</td>\n" +
+            "</tr>\n" +
+            "</tbody>\n" +
+            "</table></body></html>";
+    private static final String BEGIN_FOLDER = "<tr>\n" +
+            "<td><h4>";
+    private static final String END_FOLDER = "</h4></td>\n" +
+            "</tr>";
+    private static final String BEGIN_FILE = "<tr>\n" +
+            "<td>";
+    private static final String END_FILE = "</td>\n" +
+            "</tr>";
     private static final String JPEG = ".jpeg";
     private static final String JPG = ".jpg";
     private static final String PNG = ".png";
+    private static final String BEGIN_LINK = "<a href=\"";
+    private static final String MIDDLE_LINK = "\">";
+    private static final String END_LINK = "</a>";
     private HashMap<String, SoftReference<FileItem>> cachedData;
 
     /**
@@ -42,6 +61,14 @@ public class FunctionFileItem implements Function<String,FileItem> {
         FileItem fileItem = null;
         StringBuilder strb = new StringBuilder("");
         ArrayList<byte []> passwords = getPasswords(file);
+        int idx = file.length()-1;
+        String relativePath;
+        if(file.charAt(idx) == '/') {
+            relativePath = file.substring(idx);
+        } else {
+            while(file.charAt(idx) != '/') idx--;
+            relativePath = file.substring(TCPServerSelector.ROOT_PATH.length()) + "/";
+        }
         if(f.isDirectory()){
             // IF FILE PATH IS A FOLDER
             strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG);
@@ -49,9 +76,9 @@ public class FunctionFileItem implements Function<String,FileItem> {
             if(listOfFiles != null) {
                 for (int i = 0; i < listOfFiles.length; i++) {
                     if (listOfFiles[i].isFile() && !listOfFiles[i].isHidden()) {
-                        strb.append(BEGIN_FILE).append(listOfFiles[i].getName()).append(END_FILE).append(BREAK);
+                        strb.append(BEGIN_FILE).append(BEGIN_LINK).append(relativePath).append(listOfFiles[i].getName()).append(MIDDLE_LINK).append(listOfFiles[i].getName()).append(END_LINK).append(END_FILE);
                     } else if (listOfFiles[i].isDirectory() && !listOfFiles[i].isHidden()) {
-                        strb.append(BEGIN_FOLDER).append(listOfFiles[i].getName()).append(END_FOLDER).append(BREAK);
+                        strb.append(BEGIN_FOLDER).append(BEGIN_LINK).append(relativePath).append(listOfFiles[i].getName()).append(MIDDLE_LINK).append(listOfFiles[i].getName()).append(END_LINK).append(END_FOLDER);
                     }
                 }
             }
@@ -79,9 +106,6 @@ public class FunctionFileItem implements Function<String,FileItem> {
                         ImageIO.write( originalImage, "jpg", baos );
                         baos.flush();
                         imageInByte = baos.toByteArray();
-                        /*System.out.println("image:");
-                        for(byte b: imageInByte) System.out.print((int)b+",");
-                        System.out.println();*/
                     } catch (Exception e){
                         e.printStackTrace();
                         return null;
@@ -94,9 +118,6 @@ public class FunctionFileItem implements Function<String,FileItem> {
                         ImageIO.write( originalImage, "png", baos );
                         baos.flush();
                         imageInByte = baos.toByteArray();
-                        /*System.out.println("image:");
-                        for(byte b: imageInByte) System.out.print((int)b+",");
-                        System.out.println();*/
                     } catch (Exception e){
                         e.printStackTrace();
                         return null;

@@ -64,14 +64,13 @@ public final class PasswordDecoder {
             e.printStackTrace();
         }
         System.arraycopy(md5Pass,0,userPass,username.length(),md5Pass.length);
-        // WRITE INCOMMING PASSWORD AND USERNAME TO FILE
+        // WRITE INCOMMING PASSWORD AND USERNAME TO FILE - FOR TESTING
         /*try {
+            System.out.println("wiring new password");
             FileUtils.writeByteArrayToFile(new File("/home/sedlasi1/Desktop/Skola/ASS/Semestralka/server/root/admin/.htaccess"), userPass);
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        //System.out.println("PASS: |"+new String(userPass));
-        //System.out.println("SASS: |"+new String(fileItem.getPasswords().get(0)));
         for(i = 0; i < fileItem.getPasswords().size(); i++){
             if(Arrays.equals(fileItem.getPasswords().get(i),userPass)){
                 return true;

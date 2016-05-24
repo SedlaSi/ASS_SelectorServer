@@ -87,10 +87,10 @@ public class EchoSelectorProtocol implements TCPProtocol {
             }
         } catch (IOException e) {
             //e.printStackTrace();
-            System.out.println("IOException catched in server.EchoSelectorProtocol");
+            //System.out.println("IOException catched in server.EchoSelectorProtocol");
         } catch (Exception ex){
             //ex.printStackTrace();
-            System.out.println("WRONG INPUT EXCEPTION");
+            //System.out.println("WRONG INPUT EXCEPTION");
             try{
                 readRest(socketChannel);
                 logger.warning("UNKNOWN COMMAND request acquired from client "+socketChannel.getLocalAddress());

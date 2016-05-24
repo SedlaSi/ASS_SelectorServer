@@ -20,9 +20,27 @@ public class TestTCPServerSelector {
     private static String getNoLogRes = "HTTP/1.1 200 OK\n" +
             "Content-Type: text/html\n" +
             "\n" +
-            "<html><body><h2>file</h2><br><h1>admin</h1><br></body></html>\n";
+            "<html><body><table>\n" +
+            "<tbody>\n" +
+            "<tr>\n" +
+            "  <td><h3>CONTENT:</h3></td>\n" +
+            "</tr>\n" +
+            "<tr>\n" +
+            "<td>\n" +
+            "<table>\n" +
+            "<tbody><tr>\n" +
+            "<td><a href=\"/file\">file</a></td>\n" +
+            "</tr><tr>\n" +
+            "<td><h4><a href=\"/admin\">admin</a></h4></td>\n" +
+            "</tr></tbody>\n" +
+            "</table>\n" +
+            "</td>\n" +
+            "</tr>\n" +
+            "</tbody>\n" +
+            "</table></body></html>\n";
     private static String getLogWrongReq = "GET /admin S:T";
     private static String getLogWrongRes = "HTTP/1.1 401 Authorization failed\n" +
+            "WWW-Authenticate: Basic realm=\"myrealm\"\n" +
             "Content-Type: text/html\n" +
             "\n" +
             "<html><body><h1>Please insert correct username:password then try again.</h1></body></html>\n";

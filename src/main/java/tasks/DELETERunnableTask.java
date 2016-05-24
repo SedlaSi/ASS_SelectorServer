@@ -41,7 +41,7 @@ public class DELETERunnableTask extends RunnableTask {
             } catch (Exception e){
                 try {
                     if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
-                        client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
+                        client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + REQUIRED_AUTHENTICATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
                     } else {
 
                             client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + DELETE_ERR_MSG).getBytes("UTF-8")));

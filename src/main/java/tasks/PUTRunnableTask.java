@@ -54,7 +54,7 @@ public class PUTRunnableTask extends RunnableTask {
                 logger.fine("New file "+url+" created by user "+client.getLocalAddress());
             } catch (Exception e){
                 if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
-                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
+                    client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + REQUIRED_AUTHENTICATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
                 } else {
                     client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_INTERNAL_ERROR + CONTENT_TYPE_HTML + "\n" + INTERNAL_ERR_MSG).getBytes("UTF-8")));
                 }

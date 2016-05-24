@@ -23,6 +23,7 @@ public abstract class RunnableTask implements Runnable {
     static final String INTERNAL_ERR_MSG = "<html><body><h1>Internal server error, please repeat your task.</h1></body></html>";
     public static final String REQUEST_FAILED_HEADER_NOT_FOUND = "HTTP/1.1 404 Page not found\n";
     static final String REQUEST_FAILED_HEADER_AUTHORIZATION = "HTTP/1.1 401 Authorization failed\n";
+    static final String REQUIRED_AUTHENTICATION = "WWW-Authenticate: Basic realm=\"myrealm\"\n";
     static final String REQUEST_FAILED_HEADER_INTERNAL_ERROR = "HTTP/1.1 501 Internal Error\n";
 
     public static final String CONTENT_TYPE_HTML = "Content-Type: text/html\n";
@@ -106,7 +107,7 @@ public abstract class RunnableTask implements Runnable {
             end = beg;
             while(end < msg.length && (char)msg[end] != '\n') end++;
             password = msgStr.substring(beg,end-1);
-            System.out.println("BasedPassword = |"+password+"|");
+            //System.out.println("BasedPassword = |"+password+"|");
         }
     }
 

@@ -39,7 +39,7 @@ public class GETRunnableTask extends RunnableTask {
                if(e.getMessage() != null && e.getMessage().equals(WRONG_PASSWORD_EXCEPTION)){
                    System.out.println(WRONG_PASSWORD_EXCEPTION);
                    try {
-                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
+                       client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_AUTHORIZATION + REQUIRED_AUTHENTICATION + CONTENT_TYPE_HTML + "\n" + WRONG_PASSWORD_MSG).getBytes("UTF-8")));
                    } catch (IOException e1) {
                        System.out.println("Writing client exception....really?.....that is such a drag...");
                    }
