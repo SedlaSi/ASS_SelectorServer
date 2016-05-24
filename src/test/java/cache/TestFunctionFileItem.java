@@ -20,8 +20,8 @@ public class TestFunctionFileItem {
 
     @Test
     public void testApply(){
-        String path = "/tmp/.hidden";
-        TCPServerSelector.ROOT_PATH = "/tmp";
+        String path = TCPServerSelector.ROOT_PATH + "/.hidden";
+        //TCPServerSelector.ROOT_PATH = "/tmp";
         byte [] body = "This is body".getBytes();
         String incommingBody = "Content-Type: text/html\n" +
                 "\n" +
@@ -54,7 +54,7 @@ public class TestFunctionFileItem {
         f.delete();
 
 
-        path = "/tmp/file";
+        path = TCPServerSelector.ROOT_PATH + "/file";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -74,7 +74,7 @@ public class TestFunctionFileItem {
         fileItem = func.apply(path);
         assertNull(fileItem);
 
-        path = "/tmp/smile.jpg";
+        path = TCPServerSelector.ROOT_PATH + "/smile.jpg";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -94,7 +94,7 @@ public class TestFunctionFileItem {
         assertEquals(new String(fileItem.getFile()),new String(incommingImageSmile));
         f.delete();
 
-        path = "/tmp/xbox.png";
+        path = TCPServerSelector.ROOT_PATH + "/xbox.png";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -114,7 +114,7 @@ public class TestFunctionFileItem {
         assertEquals(new String(fileItem.getFile()),new String(incommingImageXbox));
         f.delete();
 
-        path = "/tmp/wrong.png";
+        path = TCPServerSelector.ROOT_PATH + "/wrong.png";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -128,7 +128,7 @@ public class TestFunctionFileItem {
         assertNull(fileItem);
         f.delete();
 
-        path = "/tmp/wrong.jpg";
+        path = TCPServerSelector.ROOT_PATH + "/wrong.jpg";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -142,7 +142,7 @@ public class TestFunctionFileItem {
         assertNull(fileItem);
         f.delete();
 
-        path = "/tmp/my_dir";
+        path = TCPServerSelector.ROOT_PATH + "/my_dir";
         f = new File(path);
         if(!f.mkdir()){
             f.delete();
@@ -150,9 +150,9 @@ public class TestFunctionFileItem {
             return;
         }
 
-        String filePath = "/tmp/my_dir/file";
+        String filePath = TCPServerSelector.ROOT_PATH + "/my_dir/file";
         File filePathFile = new File(filePath);
-        String folderPath = "/tmp/my_dir/folder";
+        String folderPath = TCPServerSelector.ROOT_PATH + "/my_dir/folder";
         File folderPathFile = new File(folderPath);
         try {
             if(!folderPathFile.mkdir()){
@@ -186,7 +186,7 @@ public class TestFunctionFileItem {
         assertEquals(new String(fileItem.getFile()),incommingFolder);
         assertNull(fileItem.getPasswords());
 
-        String securedFilePath = "/tmp/my_dir/.htaccess";
+        String securedFilePath = TCPServerSelector.ROOT_PATH + "/my_dir/.htaccess";
         byte [] passwords = "USER:PASS\nADMIN:PASS".getBytes();
         File securedFile = new File(securedFilePath);
         try {

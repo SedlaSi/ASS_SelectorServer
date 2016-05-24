@@ -20,14 +20,14 @@ public class TestFileItemCache {
 
     @Test
     public void testGet(){
-        TCPServerSelector.ROOT_PATH = "/tmp";
+        //TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
-        String path = "/tmp/file";
+        String path = TCPServerSelector.ROOT_PATH + "/file";
 
         FileItem fileItem;
 
         try {
-            fileItem = fileItemCache.get("/tmp/qeqweqfss");
+            fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + "/qeqweqfss");
             assertTrue(false);
         } catch (Exception e){
             assertTrue(true);
@@ -65,9 +65,9 @@ public class TestFileItemCache {
 
     @Test
     public void testRemove(){
-        TCPServerSelector.ROOT_PATH = "/tmp";
+        //TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
-        String path = "/tmp/file";
+        String path = TCPServerSelector.ROOT_PATH + "/file";
 
         FileItem fileItem;
         File f = new File(path);
@@ -84,14 +84,14 @@ public class TestFileItemCache {
         }
 
         try {
-            fileItemCache.remove("/tmp/asdadqeqweqweqeq");
+            fileItemCache.remove(TCPServerSelector.ROOT_PATH + "/asdadqeqweqweqeq");
             assertTrue(false);
         } catch (Exception e) {
             assertTrue(true);
         }
         f.delete();
 
-        path = "/tmp/.hidden";
+        path = TCPServerSelector.ROOT_PATH + "/.hidden";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -111,9 +111,9 @@ public class TestFileItemCache {
 
     @Test
     public void testPut(){
-        TCPServerSelector.ROOT_PATH = "/tmp";
+        //TCPServerSelector.ROOT_PATH = "/tmp";
         FileItemCache fileItemCache = new FileCacheProvider().getFileItemCache();
-        String path = "/tmp/.hidden";
+        String path = TCPServerSelector.ROOT_PATH + "/.hidden";
         File f = new File(path);
         try {
             f.getParentFile().mkdirs();
@@ -128,7 +128,7 @@ public class TestFileItemCache {
         }
         f.delete();
 
-        path = "/tmp/normal_file";
+        path = TCPServerSelector.ROOT_PATH + "/normal_file";
         f = new File(path);
         try {
             f.getParentFile().mkdirs();

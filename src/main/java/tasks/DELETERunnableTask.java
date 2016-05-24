@@ -24,9 +24,6 @@ public class DELETERunnableTask extends RunnableTask {
 
     @Override
     public void run(){
-        //System.out.println("DELETE TASK COMPLETED!!");
-
-
             try{
                 parseMessage();
                 if(url == null){
@@ -53,10 +50,6 @@ public class DELETERunnableTask extends RunnableTask {
                     e1.printStackTrace();
                 }
             }
-            //client.write(ByteBuffer.wrap(("TASK = DELETE "+message).getBytes()));
-            //readURL();
-            //readLogin();
-
         try {
             client.close();
         } catch (IOException e) {

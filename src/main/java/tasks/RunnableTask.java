@@ -42,7 +42,9 @@ public abstract class RunnableTask implements Runnable {
         this.fileItemCache = fileCacheProvider.getFileItemCache();
         this.client = client;
         operationTask = null;
-        this.message = Arrays.copyOf(message,message.length);
+        if(message != null){
+            this.message = Arrays.copyOf(message,message.length);
+        }
     }
 
     @Override
@@ -51,7 +53,6 @@ public abstract class RunnableTask implements Runnable {
 
     void parseMessage(){
         byte [] msg = message;
-        //System.out.println("Message:|"+new String(msg)+"|");
         char c;
         int beg;
         for(beg = 0; beg < msg.length; beg++){
@@ -64,16 +65,14 @@ public abstract class RunnableTask implements Runnable {
             }
         }
         int end;
-        for(end = beg; end < msg.length; end++){ // ten posledni znak uz nemuze nic zkazit
+        for(end = beg; end < msg.length; end++){
             if((char)msg[end] == ' ' || (char)msg[end] == '\n' || (int)msg[end] == 13){
-                //System.out.println("posledni char "+(int)msg[end] + " predposledni char "+(int)msg[end-1]);
 
                 try {
                     url = new String(Arrays.copyOfRange(message,beg,end),"UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                //System.out.println(url+"==/admin ??? ->"+url.equals("/admin"));
                 break;
             }
             if(end+2 < msg.length && ((char)msg[end] == '%' && (char)msg[end+1] == '2' && (char)msg[end+2] == '0')){
@@ -87,35 +86,20 @@ public abstract class RunnableTask implements Runnable {
             }
         }
         if(url == null || url.isEmpty()) {
-            //System.out.println(end + "==" + message.length());
             try {
                 url = new String(Arrays.copyOfRange(message,beg,end),"UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-        //System.out.println("URL: |"+url+"|");
-        // mame URL a ted musime najit content-type a authorization
         String msgStr = "";
         try {
             msgStr = new String(msg,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        /*beg = msgStr.indexOf(ACCEPT_TYPE_REQUEST);
-        if(beg == -1){
-            acceptContent = null;
-        } else {
-            beg += ACCEPT_TYPE_REQUEST.length();
-            end = beg;
-            while(end < msg.length && (char)msg[end] != '\n') end++;
-            acceptContent = msgStr.substring(beg,end-1);
-        }*/
-        //System.out.println("AcceptContent:|"+acceptContent+"|");
-
         beg = msgStr.indexOf(AUTHORIZATION_REQUEST);
         if(beg == -1){
-            //System.out.println("no authorization");
             password = null;
         } else {
             beg += AUTHORIZATION_REQUEST.length();
@@ -124,9 +108,6 @@ public abstract class RunnableTask implements Runnable {
             password = msgStr.substring(beg,end-1);
             System.out.println("BasedPassword = |"+password+"|");
         }
-        //System.out.println("Password: "+password);
-        //System.out.println("URL: " + url);
-
     }
 
     OperationTask getOperationTask(){

@@ -37,13 +37,13 @@ public class TestTCPServerSelector {
 
     @Test
     public void testMainGET(){
-        String path = "/tmp/server";
+        String path = TCPServerSelector.ROOT_PATH;
         File serverMainFolder = new File(path);
-        String pth = "/tmp/server/file";
+        String pth = TCPServerSelector.ROOT_PATH + "/file";
         File file = new File(pth);
-        String adminPath = "/tmp/server/admin";
+        String adminPath = TCPServerSelector.ROOT_PATH + "/admin";
         File adminFolder = new File(adminPath);
-        String htaccessPath = "/tmp/server/admin/.htaccess";
+        String htaccessPath = TCPServerSelector.ROOT_PATH + "/admin/.htaccess";
         File htaccessFile = new File(htaccessPath);
         try {
             serverMainFolder.getParentFile().mkdirs();
@@ -61,12 +61,16 @@ public class TestTCPServerSelector {
             assertTrue(true);
         }
 
-
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.ROOT_PATH = "/tmp/server";
+                synchronized (this){
+                    this.wait(500);
+                }
+                //TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
@@ -180,15 +184,15 @@ public class TestTCPServerSelector {
         byte [] codedPassMD5 = md5.digest(pass.getBytes());
         String base64Code = Base64.encode((username + pass).getBytes());
 
-        String path = "/tmp/server";
+        String path = TCPServerSelector.ROOT_PATH;
         File serverMainFolder = new File(path);
-        String pth = "/tmp/server/file";
+        String pth = TCPServerSelector.ROOT_PATH + "/file";
         File file = new File(pth);
-        String adminPath = "/tmp/server/admin";
+        String adminPath = TCPServerSelector.ROOT_PATH + "/admin";
         File adminFolder = new File(adminPath);
-        String htaccessPath = "/tmp/server/admin/.htaccess";
+        String htaccessPath = TCPServerSelector.ROOT_PATH + "/admin/.htaccess";
         File htaccessFile = new File(htaccessPath);
-        String securedFilePath = "/tmp/server/admin/secured";
+        String securedFilePath = TCPServerSelector.ROOT_PATH + "/admin/secured";
         File securedFile = new File(securedFilePath);
         try {
             serverMainFolder.getParentFile().mkdirs();
@@ -215,7 +219,7 @@ public class TestTCPServerSelector {
 
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.ROOT_PATH = "/tmp/server";
+                //TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();
@@ -341,15 +345,15 @@ public class TestTCPServerSelector {
         byte [] codedPassMD5 = md5.digest(pass.getBytes());
         String base64Code = Base64.encode((username + pass).getBytes());
 
-        String path = "/tmp/server";
+        String path = TCPServerSelector.ROOT_PATH;
         File serverMainFolder = new File(path);
-        String pth = "/tmp/server/file";
+        String pth = TCPServerSelector.ROOT_PATH + "/file";
         File file = new File(pth);
-        String adminPath = "/tmp/server/admin";
+        String adminPath = TCPServerSelector.ROOT_PATH + "/admin";
         File adminFolder = new File(adminPath);
-        String htaccessPath = "/tmp/server/admin/.htaccess";
+        String htaccessPath = TCPServerSelector.ROOT_PATH + "/admin/.htaccess";
         File htaccessFile = new File(htaccessPath);
-        String securedFilePath = "/tmp/server/admin/secured";
+        String securedFilePath = TCPServerSelector.ROOT_PATH + "/admin/secured";
         File securedFile = new File(securedFilePath);
         try {
             serverMainFolder.getParentFile().mkdirs();
@@ -376,7 +380,7 @@ public class TestTCPServerSelector {
 
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.ROOT_PATH = "/tmp/server";
+                //TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();
@@ -413,7 +417,7 @@ public class TestTCPServerSelector {
         } catch (Exception e){
             e.printStackTrace();
         }
-        File fiqqle = new File("/tmp/server/fiqqle");
+        File fiqqle = new File(TCPServerSelector.ROOT_PATH + "/fiqqle");
         fiqqle.delete();
 
         try {
@@ -468,7 +472,7 @@ public class TestTCPServerSelector {
             assertTrue(false);
         }
 
-        File KK = new File("/tmp/server/KK");
+        File KK = new File(TCPServerSelector.ROOT_PATH + "/KK");
         KK.delete();
         htaccessFile.delete();
         securedFile.delete();
@@ -481,7 +485,7 @@ public class TestTCPServerSelector {
     public void testMainWrongInput(){
         Thread serverThead = new Thread(() -> {
             try {
-                TCPServerSelector.ROOT_PATH = "/tmp/server";
+                //TCPServerSelector.ROOT_PATH = "/tmp/server";
                 TCPServerSelector.main(new String [] {""});
             } catch (IOException e) {
                 e.printStackTrace();

@@ -18,12 +18,12 @@ public class EchoSelectorProtocol implements TCPProtocol {
     private ByteBuffer tag;
     private ByteBuffer etOrutBuff;
     private ByteBuffer eleteBuf;
-    private ServerSocketChannel server;
+    private static final Logger logger = Logger.getLogger("server.EchoSelectorProtocol");
     private Selector selector;
     private static final String UNKNOWN_COMMAND_ERR = RunnableTask.REQUEST_FAILED_HEADER_NOT_FOUND + RunnableTask.CONTENT_TYPE_HTML + "\n<html><body><h1>Unknown command, please try again.</h1></body></html>";
     private PoolProvider poolProvider;
     private FileCacheProvider fileCacheProvider;
-    private static final Logger logger = Logger.getLogger("server.EchoSelectorProtocol");
+    private ServerSocketChannel server;
 
     public EchoSelectorProtocol(ServerSocketChannel serverSocketChannel, Selector selector, int poolSize){
         this.server = serverSocketChannel;
@@ -37,6 +37,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
     }
 
     public void handleRead(SelectionKey key) {
+
         SocketChannel socketChannel = (SocketChannel) key.channel();
         try {
             if((socketChannel.read(tag)) == -1){
@@ -48,7 +49,6 @@ public class EchoSelectorProtocol implements TCPProtocol {
                     throw new IOException("Read exception");
                 }
                 if(new String(etOrutBuff.array(),"UTF-8").equals("ET ")){ // RIGHT TAG ACQUIRED
-                    //System.out.println("GET  acquired");
                     logger.fine("GET request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new GETRunnableTask(msg,socketChannel,fileCacheProvider);
@@ -62,7 +62,6 @@ public class EchoSelectorProtocol implements TCPProtocol {
                     throw new IOException("Read exception");
                 }
                 if(new String(etOrutBuff.array(),"UTF-8").equals("UT ")){ // RIGHT TAG ACQUIRED
-                    //System.out.println("PUT  acquired");
                     logger.fine("PUT request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new PUTRunnableTask(msg,socketChannel,fileCacheProvider);
@@ -75,7 +74,6 @@ public class EchoSelectorProtocol implements TCPProtocol {
                     throw new IOException("Read exception");
                 }
                 if(new String(eleteBuf.array(),"UTF-8").equals("ELETE ")){ // RIGHT TAG ACQUIRED
-                    //System.out.println("DELETE  acquired");
                     logger.fine("DELETE request acquired from client "+socketChannel.getLocalAddress());
                     byte[] msg = readRest(socketChannel);
                     RunnableTask runnable = new DELETERunnableTask(msg,socketChannel,fileCacheProvider);
@@ -89,10 +87,10 @@ public class EchoSelectorProtocol implements TCPProtocol {
             }
         } catch (IOException e) {
             //e.printStackTrace();
-            //System.out.println("IOException catched in server.EchoSelectorProtocol");
+            System.out.println("IOException catched in server.EchoSelectorProtocol");
         } catch (Exception ex){
             //ex.printStackTrace();
-            //System.out.println("WRONG INPUT EXCEPTION");
+            System.out.println("WRONG INPUT EXCEPTION");
             try{
                 readRest(socketChannel);
                 logger.warning("UNKNOWN COMMAND request acquired from client "+socketChannel.getLocalAddress());
@@ -121,6 +119,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
             logger.fine("Writing to client "+client.getLocalAddress());
         } catch (IOException e) {
             //e.printStackTrace();
+            logger.warning("Failed to write to client ");
         }
     }
 

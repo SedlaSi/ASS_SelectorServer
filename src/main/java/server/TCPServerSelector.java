@@ -13,8 +13,8 @@ public class TCPServerSelector {
     private static final Logger logger = Logger.getLogger("server.TCPServerSelector");
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 5012;
-    public static String ROOT_PATH =                           //Home folder of server
-            "/home/sedlasi1/Desktop/Skola/ASS/Semestralka/server/root"; // DO NOT put '/' at the end of the path
+    public static final String ROOT_PATH =   "/tmp/server"  ;                      //Home folder of server
+            //"/home/sedlasi1/Desktop/Skola/ASS/Semestralka/server/root"; // DO NOT put '/' at the end of the path
     private static final int POOL_SIZE = 20; // Number of threads in pool
     private static final int TIMEOUT = 2; // Wait timeout (milliseconds)
 
@@ -25,7 +25,6 @@ public class TCPServerSelector {
         serverSocket.configureBlocking(false);
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
         TCPProtocol protocol = new EchoSelectorProtocol(serverSocket,selector,POOL_SIZE);
-        //RunnableTask.ROOT_PATH = SERVER_HOME_FOLDER;
         logger.finest("Starting server with IP: "+SERVER_IP+", PORT: "+SERVER_PORT);
         while (true) {
             if (selector.select(TIMEOUT) == 0) {
