@@ -25,11 +25,10 @@ public class TestFunctionFileItem {
         byte [] body = "This is body".getBytes();
         String incommingBody = "Content-Type: text/html\n" +
                 "\n" +
-                "<html><body><table>\n" +
+                "<!DOCTYPE html><html><body><table>\n" +
                 "<tbody>\n" +
                 "<tr>\n" +
-                "  <td><h3>CONTENT:</h3></td>\n" +
-                "</tr>\n" +
+                "  <td><h3>file</h3></td></tr>\n" +
                 "<tr>\n" +
                 "<td>\n" +
                 "<table>\n" +
@@ -44,11 +43,10 @@ public class TestFunctionFileItem {
                 "</table></body></html>";
         String incommingFolder = "Content-Type: text/html\n" +
                 "\n" +
-                "<html><body><table>\n" +
+                "<!DOCTYPE html><html><body><table>\n" +
                 "<tbody>\n" +
                 "<tr>\n" +
-                "  <td><h3>CONTENT:</h3></td>\n" +
-                "</tr>\n" +
+                "  <td><h3>my_dir</h3></td></tr>\n" +
                 "<tr>\n" +
                 "<td>\n" +
                 "<table>\n" +

@@ -20,11 +20,10 @@ public class TestTCPServerSelector {
     private static String getNoLogRes = "HTTP/1.1 200 OK\n" +
             "Content-Type: text/html\n" +
             "\n" +
-            "<html><body><table>\n" +
+            "<!DOCTYPE html><html><body><table>\n" +
             "<tbody>\n" +
             "<tr>\n" +
-            "  <td><h3>CONTENT:</h3></td>\n" +
-            "</tr>\n" +
+            "  <td><h3>server</h3></td></tr>\n" +
             "<tr>\n" +
             "<td>\n" +
             "<table>\n" +
@@ -43,15 +42,15 @@ public class TestTCPServerSelector {
             "WWW-Authenticate: Basic realm=\"myrealm\"\n" +
             "Content-Type: text/html\n" +
             "\n" +
-            "<html><body><h1>Please insert correct username:password then try again.</h1></body></html>\n";
+            "<!DOCTYPE html><html><body><h1>Please insert correct username:password then try again.</h1></body></html>\n";
     private static String wrongPathGet = "HTTP/1.1 404 Page not found\n" +
             "Content-Type: text/html\n" +
             "\n" +
-            "<html><body><h1>Wrong path, please try again.</h1></body></html>\n";
+            "<!DOCTYPE html><html><body><h1>Wrong path, please try again.</h1></body></html>\n";
     private static String wrongPathDelete = "HTTP/1.1 404 Page not found\n" +
             "Content-Type: text/html\n" +
             "\n" +
-            "<html><body><h1>No file or directory to be deleted.</h1></body></html>\n";
+            "<!DOCTYPE html><html><body><h1>No file or directory to be deleted.</h1></body></html>\n";
 
     @Test
     public void testMainGET(){
@@ -431,7 +430,7 @@ public class TestTCPServerSelector {
             assertEquals(strb.toString(), "HTTP/1.1 200 OK\n" +
                     "Content-Type: text/html\n" +
                     "\n" +
-                    "<html><body><h1>Successfully created a new file: /fiqqle</h1></body></html>\n");
+                    "<!DOCTYPE html><html><body><h1>Successfully created a new file: /fiqqle</h1></body></html>\n");
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -484,7 +483,7 @@ public class TestTCPServerSelector {
             assertEquals(strb.toString(),"HTTP/1.1 200 OK\n" +
                     "Content-Type: text/html\n" +
                     "\n" +
-                    "<html><body><h1>Successfully created a new file: /KK</h1></body></html>\n");
+                    "<!DOCTYPE html><html><body><h1>Successfully created a new file: /KK</h1></body></html>\n");
         } catch (Exception e){
             e.printStackTrace();
             assertTrue(false);
