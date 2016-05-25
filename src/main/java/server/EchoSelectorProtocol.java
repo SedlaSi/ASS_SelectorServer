@@ -1,15 +1,24 @@
 package server;
 
+import io.netty.util.ResourceLeakDetector;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import provider.FileCacheProvider;
 import provider.PoolProvider;
 import tasks.*;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static server.TCPServerSelector.ROOT_PATH;
 
 /**
  * Created by root on 3/29/16.
@@ -34,6 +43,7 @@ public class EchoSelectorProtocol implements TCPProtocol {
         etOrutBuff = ByteBuffer.allocate(3);
         eleteBuf = ByteBuffer.allocate(6);
         logger.finest("server.EchoSelectorProtocol started");
+        logger.setLevel(Level.OFF);
     }
 
     public void handleRead(SelectionKey key) {

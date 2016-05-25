@@ -17,10 +17,11 @@ import java.util.function.Function;
  */
 public class FunctionFileItem implements Function<String, FileItem> {
 
-    private static final String BEGIN_MSG = "<html><body><table>\n" +
+    private static final String BEGIN_MSG = "<!DOCTYPE html><html><body><table>\n" +
             "<tbody>\n" +
             "<tr>\n" +
-            "  <td><h3>CONTENT:</h3></td>\n" +
+            "  <td><h3>";
+    private static final String MIDDLE_MSG = "</h3></td>" +
             "</tr>\n" +
             "<tr>\n" +
             "<td>\n" +
@@ -71,7 +72,7 @@ public class FunctionFileItem implements Function<String, FileItem> {
         }
         if (f.isDirectory()) {
             // IF FILE PATH IS A FOLDER
-            strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG);
+            strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG).append(f.getName()).append(MIDDLE_MSG);
             File[] listOfFiles = f.listFiles();
             if (listOfFiles != null) {
                 for (int i = 0; i < listOfFiles.length; i++) {
@@ -137,7 +138,7 @@ public class FunctionFileItem implements Function<String, FileItem> {
                 fileItem = new FileItem(combined, passwords);
             } else {  // IF FILE PATH IS A FILE
                 try {
-                    strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG + BEGIN_FILE);
+                    strb.append(RunnableTask.CONTENT_TYPE_HTML + "\n" + BEGIN_MSG).append(f.getName()).append(MIDDLE_MSG).append(BEGIN_FILE);
                     String s;
                     BufferedReader bf = new BufferedReader(new FileReader(file));
                     while ((s = bf.readLine()) != null) {
@@ -146,7 +147,7 @@ public class FunctionFileItem implements Function<String, FileItem> {
                     strb.append(END_FILE + END_MSG);
                     bf.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     return null;
                 }
 

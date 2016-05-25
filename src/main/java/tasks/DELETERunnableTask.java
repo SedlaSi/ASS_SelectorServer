@@ -28,7 +28,9 @@ public class DELETERunnableTask extends RunnableTask {
             parseMessage();
             if (url == null) {
                 client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
+                // CLOSING CONNECTION AFTER OPERATION
                 client.close();
+                // CLOSING CONNECTION AFTER OPERATION
                 return;
             }
             FileItem fileItem = fileItemCache.get(TCPServerSelector.ROOT_PATH + url);
@@ -50,11 +52,13 @@ public class DELETERunnableTask extends RunnableTask {
                 e1.printStackTrace();
             }
         }
+        // CLOSING CONNECTION AFTER OPERATION
         try {
             client.close();
         } catch (IOException e) {
             System.out.println("close client exception...such a drag");
         }
+        // CLOSING CONNECTION AFTER OPERATION
     }
 
 }

@@ -28,9 +28,9 @@ public class GETRunnableTask extends RunnableTask {
             if (url == null) {
                 System.out.println("url == null");
                 client.write(ByteBuffer.wrap((REQUEST_FAILED_HEADER_NOT_FOUND + CONTENT_TYPE_HTML + "\n" + WRONG_URL_MSG).getBytes("UTF-8")));
-                // TESTING PURPOSE  ------ DELETE AFTER
+                // CLOSING CONNECTION AFTER OPERATION
                 client.close();
-                // TESTING PURPOSE  ------ DELETE AFTER
+                // CLOSING CONNECTION AFTER OPERATION
                 return;
             }
             try {
@@ -52,14 +52,14 @@ public class GETRunnableTask extends RunnableTask {
                         System.out.println("Writing client exception....really?.....that is such a drag...");
                     }
                 }
-                // TESTING PURPOSE  ------ DELETE AFTER
+                // CLOSING CONNECTION AFTER OPERATION
                 try {
                     client.close();
                 } catch (IOException easd) {
                     System.out.println("Exception while closing client.");
                     e.printStackTrace();
                 }
-                // TESTING PURPOSE  ------ DELETE AFTER
+                // CLOSING CONNECTION AFTER OPERATION
                 return;
             }
 
@@ -79,14 +79,14 @@ public class GETRunnableTask extends RunnableTask {
             System.out.println("readURL or readLogin exception");
             e.printStackTrace();
         }
-        // TESTING PURPOSE  ------ DELETE AFTER
+        // CLOSING CONNECTION AFTER OPERATION
         try {
             client.close();
         } catch (IOException e) {
             System.out.println("close client exception...such a drag");
             e.printStackTrace();
         }
-        // TESTING PURPOSE  ------ DELETE AFTER
+        // CLOSING CONNECTION AFTER OPERATION
     }
 
     private byte[] fileOutput() throws Exception {
